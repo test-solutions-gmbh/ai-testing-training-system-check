@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+description: "System check: one real eval through promptfoo"
+
+# Run from this folder, with OPENROUTER_API_KEY set:
+#   npx -y promptfoo@0.124.1 eval --no-cache --output results.html
+# Expected: 1 passed. Then open results.html in the browser.
+
+prompts:
+  - "Reply with exactly one word: {{word}}"
+
+providers:
+  - id: openrouter:anthropic/claude-haiku-5.5
+    config:
+      max_tokens: 20
+
+tests:
+  - vars:
+      word: pong
+    assert:
+      - type: icontains
+        value: pong
