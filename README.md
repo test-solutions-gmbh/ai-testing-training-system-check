@@ -1,10 +1,11 @@
 # System check
 
 About 20 minutes on a Teams call with screen sharing. Please do it twice if you can: once
-on the bank network and once on VPN. Nothing here changes settings on your laptop. Stage 1
-installs nothing.
+on the bank network and once on VPN. Nothing here changes settings on your laptop. Stages 0
+and 1 install nothing. Stop at the first stage that does not work.
 
-Files: `check.ps1` (Windows), `check.sh` (Mac), `promptfooconfig.yaml` (stage 2).
+Files: `chat-check.txt` and `chat-check-full-manual.txt` (stage 0), `check.ps1` (Windows),
+`check.sh` (Mac), `promptfooconfig.yaml` (stage 2).
 
 Get them with git:
 
@@ -15,6 +16,15 @@ cd ai-testing-training-system-check
 
 Without git: on the GitHub page, **Code > Download ZIP**, then unzip into a folder such as
 `Documents\system-check`.
+
+## Stage 0: chat AI and Excel (5 minutes, nothing to install)
+
+1. Open the chat AI your bank allows (for example Microsoft Copilot or ChatGPT).
+2. Open `chat-check.txt`. Paste prompt 1 into the chat and send it.
+3. Start a new chat. Paste prompt 2, add the answer from step 2 at the end, send it.
+4. Optional: paste all of `chat-check-full-manual.txt` into a new chat. This shows whether
+   a long text (about 45,000 characters) fits into one message.
+5. Open the Excel file shared in the Teams chat and type something into a cell.
 
 ## Stage 1: network and tools (5 minutes, installs nothing)
 
