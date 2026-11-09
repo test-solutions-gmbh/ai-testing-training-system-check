@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+description: "System check: promptfoo runs locally, no AI model needed"
+
+# The "echo" provider returns the prompt unchanged, so this needs no API key and no
+# network access to any AI provider. It only proves that promptfoo installs and runs.
+
+prompts:
+  - "The SkyWay check-in desk opens {{hours}} hours before departure."
+
+providers:
+  - echo
+
+tests:
+  - vars:
+      hours: 3
+    assert:
+      - type: contains
+        value: "3 hours"
+      - type: regex
+        value: "opens \\d+ hours"

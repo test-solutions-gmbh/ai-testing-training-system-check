@@ -4,7 +4,7 @@ About 30 minutes on a Teams call with screen sharing. Go through the steps in or
 stop at the first one that does not work (in part B,
 please run all three steps even if one fails). That tells us which version of the hands-on
 exercises will work on your laptops. Nothing here changes settings on your laptop, and
-only step 5 installs something (into a throwaway folder, no admin rights needed).
+only steps 4 and 5 install something (into your user folder, no admin rights needed).
 
 All content is fictitious: a made-up customer-service chatbot for "SkyWay Airlines". No
 bank or personal data is used.
@@ -37,14 +37,22 @@ Works if: everyone in the call sees the edit.
 Use PowerShell on Windows (Git Bash works too), Terminal on Mac, inside the
 `ai-testing-training-system-check` folder.
 
-**Step 4. Node.js and the npm registry.**
+**Step 4. Node.js and promptfoo.** Downloads promptfoo (the open-source testing tool used
+in the training) into your user folder, no admin rights needed, and runs one test. The
+test uses no AI model and no API key.
 
 ```
 node --version
-npm view promptfoo version
+npx -y promptfoo@0.124.1 eval --no-cache --output results.html
 ```
 
-Works if: Node shows v20 or higher, and npm prints a version number.
+The first run downloads promptfoo and takes one to three minutes.
+
+Works if: Node shows v20 or higher, and promptfoo ends with `1 passed`. Then open
+`results.html` in the browser.
+
+If PowerShell says that `npx.ps1` cannot be loaded because running scripts is disabled,
+use `npx.cmd` instead of `npx`.
 
 **Step 5. Python and the PyPI package index.**
 
