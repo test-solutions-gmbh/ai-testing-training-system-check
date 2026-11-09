@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+description: "System check: the bank's own AI gateway"
+
+# Needs three settings from IT (see README, step 7):
+#   OPENAI_BASE_URL  gateway address
+#   OPENAI_API_KEY   key
+#   GATEWAY_MODEL    model name
+
+prompts:
+  - "You are a customer service assistant for SkyWay Airlines, a fictitious airline. Answer in one short sentence: {{question}}"
+
+providers:
+  - id: "openai:chat:{{ env.GATEWAY_MODEL }}"
+    config:
+      max_tokens: 100
+
+tests:
+  - vars:
+      question: "Can I bring a small cabin bag on board?"
+    assert:
+      - type: javascript
+        value: "output.trim().length > 0"

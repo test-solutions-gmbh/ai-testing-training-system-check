@@ -1,7 +1,6 @@
 # System check: AI testing training
 
-About 30 minutes on a Teams call with screen sharing. Go through the steps in order and
-stop at the first one that does not work (in part B,
+Go through the steps in order and stop at the first one that does not work (in part B,
 please run all three steps even if one fails). That tells us which version of the hands-on
 exercises will work on your laptops. Nothing here changes settings on your laptop, and
 only steps 4 and 5 install something (into your user folder, no admin rights needed).
@@ -89,6 +88,24 @@ it into the Teams chat.
 Works if: "OpenAI API" or "Anthropic API" shows `OK` (HTTP 401 is fine, it means the
 service was reached without a key).
 
-## If there is time
+**Step 7 The bank's own AI gateway.**
 
-Repeat steps 1, 4 and 6 on VPN (or on the bank network, whichever was not used first).
+Ask IT:
+
+1. Can we use the AI gateway for a training? If yes: its address, a
+   key, and one model name.
+2. Can 10 to 20 people use it at the same time?
+3. Run some test queries against it:
+
+If you have the address, key and model, run in PowerShell:
+
+```
+$env:OPENAI_BASE_URL="<gateway address>"
+$env:OPENAI_API_KEY="<key>"
+$env:GATEWAY_MODEL="<model name>"
+npx -y promptfoo@0.124.1 eval -c promptfooconfig.gateway.yaml --no-cache
+```
+
+(Git Bash or Mac: `export OPENAI_BASE_URL="..."` and so on.)
+
+Works if: `1 passed`.
