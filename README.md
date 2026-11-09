@@ -3,7 +3,7 @@
 About 30 minutes on a Teams call with screen sharing. Go through the steps in order and
 stop at the first one that does not work. That tells us which version of the hands-on
 exercises will work on your laptops. Nothing here changes settings on your laptop, and
-only step 7 installs something (into a throwaway folder, no admin rights needed).
+only step 6 installs something (into a throwaway folder, no admin rights needed).
 
 All content is fictitious: a made-up customer-service chatbot for "SkyWay Airlines". No
 bank or personal data is used.
@@ -27,11 +27,7 @@ Start a new chat. Copy prompt 2 from `chat-check.txt`, paste the answer from ste
 end, and send it.
 Works if: the first line says ACCEPTABLE or NOT ACCEPTABLE, followed by a reason.
 
-**Step 3 (optional). A long text fits into one message.**
-Start a new chat and paste all of `chat-check-full-manual.txt` (about 45,000 characters).
-Works if: the chat accepts it and answers.
-
-**Step 4. Excel shared in Teams.**
+**Step 3. Excel shared in Teams.**
 Open the Excel file shared in the meeting chat and type something into a cell.
 Works if: everyone in the call sees the edit.
 
@@ -40,7 +36,7 @@ Works if: everyone in the call sees the edit.
 Use PowerShell on Windows (Git Bash works too), Terminal on Mac, inside the
 `ai-testing-training-system-check` folder.
 
-**Step 5. Node.js and the npm registry.**
+**Step 4. Node.js and the npm registry.**
 
 ```
 node --version
@@ -49,7 +45,7 @@ npm view promptfoo version
 
 Works if: Node shows v20 or higher, and npm prints a version number.
 
-**Step 6. Network check script.** Tests which AI providers and package sources are
+**Step 5. Network check script.** Tests which AI providers and package sources are
 reachable, and lists installed tools and proxy settings. Read-only.
 
 - Windows (PowerShell or Git Bash):
@@ -63,7 +59,7 @@ it into the Teams chat.
 Works if: "OpenAI API" or "Anthropic API" shows `OK` (HTTP 401 is fine, it means the
 service was reached without a key).
 
-**Step 7. Python and the PyPI package index.**
+**Step 6. Python and the PyPI package index.**
 
 Windows:
 
@@ -86,4 +82,4 @@ Works if: Python 3.12 or higher, and the install finishes without errors. Delete
 
 ## If there is time
 
-Repeat steps 1, 5 and 6 on VPN (or on the bank network, whichever was not used first).
+Repeat steps 1, 4 and 5 on VPN (or on the bank network, whichever was not used first).
