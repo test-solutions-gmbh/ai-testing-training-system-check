@@ -3,7 +3,6 @@
 # Run:   powershell -NoProfile -ExecutionPolicy Bypass -File .\check.ps1
 # If script execution is blocked by policy:
 #        Get-Content .\check.ps1 -Raw | Invoke-Expression
-# Optional: set $env:OPENROUTER_API_KEY first to also test one real model call.
 
 $ErrorActionPreference = 'Continue'
 $ProgressPreference = 'SilentlyContinue'
@@ -64,7 +63,6 @@ $isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIden
 Say ("Admin session: {0}" -f $isAdmin)
 Say ""
 Say "--- 1. Model providers (any HTTP answer from the API means reachable; 401 is fine) ---"
-Test-Url 'OpenRouter API'        'https://openrouter.ai/api/v1/models' $true
 Test-Url 'OpenAI API'            'https://api.openai.com/v1/models' $true
 Test-Url 'Anthropic API'         'https://api.anthropic.com/v1/models' $true
 Test-Url 'Google Gemini API'     'https://generativelanguage.googleapis.com/v1beta/models' $true
@@ -87,9 +85,9 @@ Tool 'uv'      'uv'     '--version'
 Tool 'git'     'git'    '--version'
 Say ""
 Say "--- 4. Proxy configuration ---"
-$orUri = [Uri]'https://openrouter.ai/'
+$orUri = [Uri]'https://api.openai.com/'
 $orVia = $sysProxy.GetProxy($orUri)
-if ($orVia.AbsoluteUri -eq $orUri.AbsoluteUri) { Say 'System proxy for openrouter.ai: none (direct)' } else { Say ("System proxy for openrouter.ai: {0}" -f $orVia.Authority) }
+if ($orVia.AbsoluteUri -eq $orUri.AbsoluteUri) { Say 'System proxy for api.openai.com: none (direct)' } else { Say ("System proxy for api.openai.com: {0}" -f $orVia.Authority) }
 foreach ($v in 'HTTPS_PROXY','HTTP_PROXY','NO_PROXY','NODE_EXTRA_CA_CERTS','SSL_CERT_FILE','REQUESTS_CA_BUNDLE') {
     $val = [Environment]::GetEnvironmentVariable($v)
     if ($val) { Say ("env {0} = {1}" -f $v, $val) }
@@ -107,23 +105,10 @@ if (Get-Command npm -ErrorAction SilentlyContinue) {
 }
 $py = Get-Command python -ErrorAction SilentlyContinue | Where-Object { $_.Source -notlike '*WindowsApps*' } | Select-Object -First 1
 if ($py) {
-    $r = (& python -c "import urllib.request as u;print(u.urlopen('https://openrouter.ai/api/v1/models',timeout=15).status)" 2>&1 | Select-Object -Last 1) -as [string]
-    if ($r -match '^\s*200\s*$') { Say "OK        Python can reach OpenRouter" } else { Say ("FAIL      Python cannot reach OpenRouter: {0}" -f $r.Trim()) }
+    $r = (& python -c "import urllib.request as u;print(u.urlopen('https://pypi.org/simple/streamlit/',timeout=15).status)" 2>&1 | Select-Object -Last 1) -as [string]
+    if ($r -match '^\s*200\s*$') { Say "OK        Python can reach PyPI" } else { Say ("FAIL      Python cannot reach PyPI: {0}" -f $r.Trim()) }
 }
 if (-not (Get-Command npm -ErrorAction SilentlyContinue) -and -not $py) { Say "skipped   (neither Node nor Python installed)" }
-Say ""
-Say "--- 6. One real model call (only if OPENROUTER_API_KEY is set) ---"
-if ($env:OPENROUTER_API_KEY) {
-    try {
-        $wc = New-Object System.Net.WebClient
-        $wc.Proxy = $sysProxy
-        $wc.Headers.Add('Authorization', "Bearer $($env:OPENROUTER_API_KEY)")
-        $wc.Headers.Add('Content-Type', 'application/json')
-        $payload = '{"model":"anthropic/claude-haiku-5.5","max_tokens":30,"messages":[{"role":"user","content":"Reply with exactly: pong"}]}'
-        $res = $wc.UploadString('https://openrouter.ai/api/v1/chat/completions', $payload) | ConvertFrom-Json
-        Say ("OK        model answered: {0}" -f $res.choices[0].message.content)
-    } catch { Say ("FAIL      model call: {0}" -f $_.Exception.Message) }
-} else { Say "skipped   (no key set)" }
 Say ""
 Say "=== end ==="
 $file = Join-Path (Get-Location) 'system-check-result.txt'

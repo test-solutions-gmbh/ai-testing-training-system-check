@@ -2,7 +2,6 @@
 # AI testing training: system check for macOS (also runs on Linux).
 # Read-only. Installs nothing, changes no settings, sends no personal data.
 # Run:   bash check.sh
-# Optional: export OPENROUTER_API_KEY=... first to also test one real model call.
 
 OUT="$(pwd)/system-check-result.txt"
 : > "$OUT"
@@ -53,7 +52,6 @@ say "=== AI testing training: system check ($(uname -s)) ==="
 say "Date: $(date '+%Y-%m-%d %H:%M')  |  OS: $(sw_vers -productVersion 2>/dev/null || uname -r)  |  arch: $(uname -m)"
 say ""
 say "--- 1. Model providers (any HTTP answer from the API means reachable; 401 is fine) ---"
-test_url 'OpenRouter API'    'https://openrouter.ai/api/v1/models' 1
 test_url 'OpenAI API'        'https://api.openai.com/v1/models' 1
 test_url 'Anthropic API'     'https://api.anthropic.com/v1/models' 1
 test_url 'Google Gemini API' 'https://generativelanguage.googleapis.com/v1beta/models' 1
@@ -88,19 +86,10 @@ if command -v npm >/dev/null 2>&1; then
   if [ "$(echo "$r" | tr -d '[:space:]')" = "0.124.1" ]; then say "OK        npm can reach its registry"; else say "FAIL      npm cannot reach its registry: $r"; fi
 fi
 if command -v python3 >/dev/null 2>&1; then
-  r=$(python3 -c "import urllib.request as u;print(u.urlopen('https://openrouter.ai/api/v1/models',timeout=15).status)" 2>&1 | tail -1)
-  if [ "$r" = "200" ]; then say "OK        Python can reach OpenRouter"; else say "FAIL      Python cannot reach OpenRouter: $r"; fi
+  r=$(python3 -c "import urllib.request as u;print(u.urlopen('https://pypi.org/simple/streamlit/',timeout=15).status)" 2>&1 | tail -1)
+  if [ "$r" = "200" ]; then say "OK        Python can reach PyPI"; else say "FAIL      Python cannot reach PyPI: $r"; fi
 fi
 if ! command -v npm >/dev/null 2>&1 && ! command -v python3 >/dev/null 2>&1; then say "skipped   (neither Node nor Python installed)"; fi
-say ""
-say "--- 6. One real model call (only if OPENROUTER_API_KEY is set) ---"
-if [ -n "$OPENROUTER_API_KEY" ]; then
-  r=$(curl -sS -m 30 "${PROXY_ARGS[@]}" https://openrouter.ai/api/v1/chat/completions \
-      -H "Authorization: Bearer $OPENROUTER_API_KEY" -H 'Content-Type: application/json' \
-      -d '{"model":"anthropic/claude-haiku-5.5","max_tokens":30,"messages":[{"role":"user","content":"Reply with exactly: pong"}]}' 2>&1)
-  if echo "$r" | grep -q '"content"'; then say "OK        model answered: $(echo "$r" | sed -n 's/.*"content": *"\([^"]*\)".*/\1/p' | head -1)"
-  else say "FAIL      model call: $(echo "$r" | head -c 300)"; fi
-else say "skipped   (no key set)"; fi
 say ""
 say "=== end ==="
 echo "Saved to $OUT"
