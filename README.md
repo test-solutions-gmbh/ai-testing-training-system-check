@@ -1,93 +1,89 @@
-# System check
+# System check: AI testing training
 
-About 20 minutes on a Teams call with screen sharing. Please do it twice if you can: once
-on the bank network and once on VPN. Nothing here changes settings on your laptop. Stages 0
-and 1 install nothing. Stop at the first stage that does not work.
+About 30 minutes on a Teams call with screen sharing. Go through the steps in order and
+stop at the first one that does not work. That tells us which version of the hands-on
+exercises will work on your laptops. Nothing here changes settings on your laptop, and
+only step 7 installs something (into a throwaway folder, no admin rights needed).
 
-Files: `chat-check.txt` and `chat-check-full-manual.txt` (stage 0), `check.ps1` (Windows),
-`check.sh` (Mac), `promptfooconfig.yaml` (stage 2).
+All content is fictitious: a made-up customer-service chatbot for "SkyWay Airlines". No
+bank or personal data is used.
 
-Get them with git:
+## Get the files
 
 ```
 git clone https://github.com/test-solutions-gmbh/ai-testing-training-system-check.git
 cd ai-testing-training-system-check
 ```
 
-Without git: on the GitHub page, **Code > Download ZIP**, then unzip into a folder such as
-`Documents\system-check`.
+## Part A: no installation needed
 
-## Stage 0: chat AI and Excel (5 minutes, nothing to install)
+**Step 1. A chat AI answers a test prompt.**
+Open the chat AI your bank allows (for example Microsoft Copilot or ChatGPT). Open
+`chat-check.txt`, copy prompt 1 and send it.
+Works if: an answer comes back.
 
-1. Open the chat AI your bank allows (for example Microsoft Copilot or ChatGPT).
-2. Open `chat-check.txt`. Paste prompt 1 into the chat and send it.
-3. Start a new chat. Paste prompt 2, add the answer from step 2 at the end, send it.
-4. Optional: paste all of `chat-check-full-manual.txt` into a new chat. This shows whether
-   a long text (about 45,000 characters) fits into one message.
-5. Open the Excel file shared in the Teams chat and type something into a cell.
+**Step 2. The chat AI acts as a judge.**
+Start a new chat. Copy prompt 2 from `chat-check.txt`, paste the answer from step 1 at the
+end, and send it.
+Works if: the first line says ACCEPTABLE or NOT ACCEPTABLE, followed by a reason.
 
-## Stage 1: network and tools (5 minutes, installs nothing)
+**Step 3 (optional). A long text fits into one message.**
+Start a new chat and paste all of `chat-check-full-manual.txt` (about 45,000 characters).
+Works if: the chat accepts it and answers.
 
-**Windows**, in PowerShell, from the folder with the files:
+**Step 4. Excel shared in Teams.**
+Open the Excel file shared in the meeting chat and type something into a cell.
+Works if: everyone in the call sees the edit.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\check.ps1
-```
+## Part B: tools on the laptop
 
-If that is refused because of a script policy, use:
+Use PowerShell on Windows (Git Bash works too), Terminal on Mac, inside the
+`ai-testing-training-system-check` folder.
 
-```powershell
-Get-Content .\check.ps1 -Raw | Invoke-Expression
-```
-
-**Mac**, in Terminal, from the folder with the files:
-
-```bash
-bash check.sh
-```
-
-The result is saved to `system-check-result.txt` and copied to the clipboard. Paste it
-into the Teams chat.
-
-To include one real model call, set the key we give you in the call first
-(Windows: `$env:OPENROUTER_API_KEY="sk-or-..."`, Mac: `export OPENROUTER_API_KEY=sk-or-...`)
-and run the check again. The key has a tiny spending limit and is deleted after the call.
-
-## Stage 2: promptfoo (5 minutes, needs Node 20 or later)
-
-Skip if Node is not installed. Same terminal, key set as above:
+**Step 5. Node.js and the npm registry.**
 
 ```
-npx -y promptfoo@0.124.1 eval --no-cache --output results.html
+node --version
+npm view promptfoo version
 ```
 
-Expected: `1 passed`. Then open `results.html` in the browser.
+Works if: Node shows v20 or higher, and npm prints a version number.
 
-## Stage 3: Python and a local web app (5 to 10 minutes, needs Python 3.12 or uv)
+**Step 6. Network check script.** Tests which AI providers and package sources are
+reachable, and lists installed tools and proxy settings. Read-only.
 
-Skip if neither Python nor uv is installed. This installs Streamlit into a throwaway
-folder (about 100 MB, no admin rights needed) and starts its demo app:
+- Windows (PowerShell or Git Bash):
+  `powershell -NoProfile -ExecutionPolicy Bypass -File ./check.ps1`
+  If scripts are blocked by policy, in PowerShell:
+  `Get-Content .\check.ps1 -Raw | Invoke-Expression`
+- Mac: `bash check.sh`
 
-**Windows**
+The result is saved to `system-check-result.txt` and copied to the clipboard. Please paste
+it into the Teams chat.
+Works if: "OpenAI API" or "Anthropic API" shows `OK` (HTTP 401 is fine, it means the
+service was reached without a key).
 
-```powershell
+**Step 7. Python and the PyPI package index.**
+
+Windows:
+
+```
+python --version
 python -m venv st-check
 .\st-check\Scripts\python -m pip install streamlit
-.\st-check\Scripts\streamlit hello
 ```
 
-**Mac**
+Mac:
 
-```bash
+```
+python3 --version
 python3 -m venv st-check
 ./st-check/bin/python -m pip install streamlit
-./st-check/bin/streamlit hello
 ```
 
-A browser tab opens on `http://localhost:8501`. Click one of the demos, then press Ctrl+C
-in the terminal. Delete the `st-check` folder afterwards.
+Works if: Python 3.12 or higher, and the install finishes without errors. Delete the
+`st-check` folder afterwards.
 
-## Stage 4: Teams (2 minutes)
+## If there is time
 
-- Share your screen with the Streamlit or report page open
-- Open the Excel file shared in the meeting chat and type something in a cell
+Repeat steps 1, 5 and 6 on VPN (or on the bank network, whichever was not used first).
