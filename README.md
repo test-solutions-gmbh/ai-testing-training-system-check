@@ -1,9 +1,10 @@
 # System check: AI testing training
 
 About 30 minutes on a Teams call with screen sharing. Go through the steps in order and
-stop at the first one that does not work. That tells us which version of the hands-on
+stop at the first one that does not work (in part B,
+please run all three steps even if one fails). That tells us which version of the hands-on
 exercises will work on your laptops. Nothing here changes settings on your laptop, and
-only step 6 installs something (into a throwaway folder, no admin rights needed).
+only step 5 installs something (into a throwaway folder, no admin rights needed).
 
 All content is fictitious: a made-up customer-service chatbot for "SkyWay Airlines". No
 bank or personal data is used.
@@ -45,21 +46,7 @@ npm view promptfoo version
 
 Works if: Node shows v20 or higher, and npm prints a version number.
 
-**Step 5. Network check script.** Tests which AI providers and package sources are
-reachable, and lists installed tools and proxy settings. Read-only.
-
-- Windows (PowerShell or Git Bash):
-  `powershell -NoProfile -ExecutionPolicy Bypass -File ./check.ps1`
-  If scripts are blocked by policy, in PowerShell:
-  `Get-Content .\check.ps1 -Raw | Invoke-Expression`
-- Mac: `bash check.sh`
-
-The result is saved to `system-check-result.txt` and copied to the clipboard. Please paste
-it into the Teams chat.
-Works if: "OpenAI API" or "Anthropic API" shows `OK` (HTTP 401 is fine, it means the
-service was reached without a key).
-
-**Step 6. Python and the PyPI package index.**
+**Step 5. Python and the PyPI package index.**
 
 Windows:
 
@@ -80,6 +67,20 @@ python3 -m venv st-check
 Works if: Python 3.12 or higher, and the install finishes without errors. Delete the
 `st-check` folder afterwards.
 
+**Step 6. Network check script.** Tests which AI providers and package sources are
+reachable, and lists installed tools and proxy settings. Read-only.
+
+- Windows (PowerShell or Git Bash):
+  `powershell -NoProfile -ExecutionPolicy Bypass -File ./check.ps1`
+  If scripts are blocked by policy, in PowerShell:
+  `Get-Content .\check.ps1 -Raw | Invoke-Expression`
+- Mac: `bash check.sh`
+
+The result is saved to `system-check-result.txt` and copied to the clipboard. Please paste
+it into the Teams chat.
+Works if: "OpenAI API" or "Anthropic API" shows `OK` (HTTP 401 is fine, it means the
+service was reached without a key).
+
 ## If there is time
 
-Repeat steps 1, 4 and 5 on VPN (or on the bank network, whichever was not used first).
+Repeat steps 1, 4 and 6 on VPN (or on the bank network, whichever was not used first).
